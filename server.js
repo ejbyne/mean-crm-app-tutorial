@@ -6,8 +6,7 @@ var mongoose = require('mongoose');
 var User = require('./app/models/user');
 var jwt = require('jsonwebtoken');
 var config = require('./config');
-var apiRoutes = require('./app/routes/api')(app, express);
-mongoose.connect(config.database);
+var path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -22,11 +21,16 @@ Authorization');
 
 app.use(morgan('dev'));
 
-app.get('/', function(req, res) {
-  res.send('Welcome to the home page!');
-});
+mongoose.connect(config.database);
 
+app.use(express.static(__dirname + '/public'));
+
+var apiRoutes = require('./app/routes/api')(app, express);
 app.use('/api', apiRoutes);
+
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
 
 app.listen(config.port);
 console.log('Magic happens on port ' + config.port);
