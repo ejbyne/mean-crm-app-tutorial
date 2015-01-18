@@ -16,14 +16,12 @@ module.exports = function(app, express) {
         throw err;
       }
       if (!user) {
-        res.json({ success: false, message: 'Authentication failed. User not found\
-  .'});
+        res.json({ success: false, message: 'Authentication failed. User not found.'});
       }
       else if (user) {
         var validPassword = user.comparePassword(req.body.password);
         if (!validPassword) {
-          res.json({ success: false, message: 'Authentication failed: Wrong passwo\
-  rd'});
+          res.json({ success: false, message: 'Authentication failed: Wrong password'});
         }
         else {
           var token = jwt.sign({ name: user.name, username: user.username },
@@ -39,13 +37,11 @@ module.exports = function(app, express) {
   });
 
   apiRouter.use(function(req, res, next) {
-    var token = req.body.token || req.param('token') || req.headers['x-access-toke\
-  n'];
+    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
     if (token) {
       jwt.verify(token, superSecret, function(err, decoded) {
         if (err) {
-          return res.status(403).send({ success: false, message: 'Failed to authen\
-  ticate token.'});
+          return res.status(403).send({ success: false, message: 'Failed to authenticate token.'});
         }
         else {
           req.decoded = decoded;
@@ -72,8 +68,7 @@ module.exports = function(app, express) {
       user.save(function(err) {
         if (err) {
           if (err.code == 11000) {
-            return res.json({ success: false, messaage: 'A user with that\
-   username already exists.' });
+            return res.json({ success: false, messaage: 'A user with that username already exists.' });
           } else {
             return res.send(err);
           }

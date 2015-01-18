@@ -36,7 +36,7 @@ angular.module('authService', [])
       return $q.reject({ message: 'User has no token.' });
     }
   };
-  
+
   return authFactory;
 })
 
@@ -59,7 +59,7 @@ angular.module('authService', [])
   return authTokenFactory;
 })
 
-.factory('AuthInterceptor', function($q, AuthToken) {
+.factory('AuthInterceptor', function($q, $location, AuthToken) {
   var interceptorFactory = {};
 
   interceptorFactory.request = function(config) {
