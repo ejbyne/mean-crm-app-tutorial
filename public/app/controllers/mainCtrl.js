@@ -9,7 +9,7 @@ angular.module('mainCtrl', [])
   });
 
   Auth.getUser()
-  .success(function(data) {
+  .then(function(data) {
     vm.user = data;
   });
 
